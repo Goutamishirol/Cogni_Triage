@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: cognitriage-postgres
+    environment:
+      POSTGRES_DB: cognitriage
+      POSTGRES_USER: cognitriage
+      POSTGRES_PASSWORD: cognitriage
+    ports:
+      - "5434:5432"
+    volumes:
+      - cognitriage-pgdata:/var/lib/postgresql/data
+
+volumes:
+  cognitriage-pgdata:

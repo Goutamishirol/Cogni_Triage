@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: CogniTriage
+  datasource:
+    url: jdbc:postgresql://localhost:5434/cognitriage
+    username: cognitriage
+    password: cognitriage
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+
+server:
+  port: 8080
