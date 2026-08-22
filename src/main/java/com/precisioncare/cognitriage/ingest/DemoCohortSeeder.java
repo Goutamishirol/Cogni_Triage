@@ -4,6 +4,7 @@ import com.precisioncare.cognitriage.patient.Comorbidity;
 import com.precisioncare.cognitriage.patient.Patient;
 import com.precisioncare.cognitriage.patient.PatientRepository;
 import com.precisioncare.cognitriage.patient.Sex;
+import com.precisioncare.cognitriage.risk.RiskScoringService;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
@@ -15,16 +16,17 @@ import java.util.List;
 public class DemoCohortSeeder implements ApplicationRunner {
 
     private final PatientRepository patients;
+    private final RiskScoringService scoring;
 
-    public DemoCohortSeeder(PatientRepository patients) {
+    public DemoCohortSeeder(PatientRepository patients,RiskScoringService scoring) {
         this.patients = patients;
+        this.scoring=scoring;
     }
 
     @Override
     public void run(ApplicationArguments args) {
-        if (patients.count() > 0) {
-            return;
-        }
+        patients.findAll().forEach(pt ->
+                System.out.println(pt.getCohortId() + " -> " + scoring.score(pt).score()));
 
         Patient p1 = new Patient();
         p1.setCohortId("CT_0001");
@@ -261,5 +263,8 @@ public class DemoCohortSeeder implements ApplicationRunner {
                 p1, p2, p3, p4, p5, p6, p7, p8, p9, p10,
                 p11, p12, p13, p14, p15, p16, p17, p18, p19, p20
         ));
+
+        patients.findAll().forEach(pt ->
+                System.out.println(pt.getCohortId() + " -> " + scoring.score(pt).score()));
     }
 }
