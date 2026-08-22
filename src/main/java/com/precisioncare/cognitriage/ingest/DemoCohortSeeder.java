@@ -1,5 +1,5 @@
 package com.precisioncare.cognitriage.ingest;
-
+import com.precisioncare.cognitriage.pathway.DiagnosticStage;
 import com.precisioncare.cognitriage.patient.Comorbidity;
 import com.precisioncare.cognitriage.patient.Patient;
 import com.precisioncare.cognitriage.patient.PatientRepository;
@@ -260,6 +260,16 @@ public class DemoCohortSeeder implements ApplicationRunner {
         p20.setEtiv(1400.0);
         p20.setNwbv(0.744);
         p20.setComorbidities(EnumSet.of(Comorbidity.DEPRESSION));
+
+
+
+        p3.setCurrentStage(DiagnosticStage.BLOOD_BIOMARKER);
+        p6.setCurrentStage(DiagnosticStage.MRI_EVALUATION);
+        p9.setCurrentStage(DiagnosticStage.BLOOD_BIOMARKER);
+        p10.setCurrentStage(DiagnosticStage.PET_PRIORITIZATION);
+        p13.setCurrentStage(DiagnosticStage.MRI_EVALUATION);
+        p16.setCurrentStage(DiagnosticStage.PET_PRIORITIZATION);
+        p18.setCurrentStage(DiagnosticStage.BLOOD_BIOMARKER);
 
         patients.saveAll(List.of(
                 p1, p2, p3, p4, p5, p6, p7, p8, p9, p10,

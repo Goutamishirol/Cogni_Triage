@@ -9,6 +9,7 @@ public record PatientSummaryDto(
         Double cdr,
         double riskScore,
         String riskTier,
+        String currentStage,
         String leadingFactor,
-        String recommendation
+        String nextAction
 ) {}

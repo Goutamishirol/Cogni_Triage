@@ -17,6 +17,13 @@ public record PatientDetailDto(
         double riskScore,
         String riskTier,
         String recommendation,
+        String currentStage,
+        String currentStageDescription,
+        String nextStage,
+        boolean escalationRecommended,
+        String actionSummary,
+        List<String> recommendedTests,
+        String actionRationale,
         List<RiskFactorDto> factors,
         List<String> dataGaps
 ) {}

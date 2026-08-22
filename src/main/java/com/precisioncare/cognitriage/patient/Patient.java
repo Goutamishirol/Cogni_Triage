@@ -1,4 +1,5 @@
 package com.precisioncare.cognitriage.patient;
+import com.precisioncare.cognitriage.pathway.DiagnosticStage;
 
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
@@ -66,4 +67,7 @@ public class Patient {
 
 
     private Double nwbv;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private DiagnosticStage currentStage = DiagnosticStage.COGNITIVE_SCREENING;
 }
