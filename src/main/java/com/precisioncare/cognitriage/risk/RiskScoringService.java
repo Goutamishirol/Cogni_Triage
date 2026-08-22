@@ -8,6 +8,11 @@ import java.util.List;
 public class RiskScoringService{
     private static final double W_CDR=30.0;
     private static final double W_MMSE = 25.0;
+    private static final double W_APOE4       = 12.0;
+    private static final double W_BRAIN_VOL   = 13.0;
+    private static final double W_AGE         = 10.0;
+    private static final double W_COMORBIDITY =  5.0;
+    private static final double W_EDUCATION   = -5.0;   // protective
 
     public RiskAssessment score(Patient p) {
         List<RiskFactor> factors = new ArrayList<>();
@@ -50,7 +55,60 @@ public class RiskScoringService{
         } else {
             gaps.add("MMSE not recorded");
         }
+        // ---- APOE e4 allele count ----
+        if (p.getApoe4AlleleCount() != null) {
+            int alleles = p.getApoe4AlleleCount();
+            double sevApoe = clamp(alleles / 2.0);
+            weighted += sevApoe * W_APOE4;
+            availableWeight += W_APOE4;
+            factors.add(new RiskFactor("APOE e4", alleles + " allele(s)", sevApoe * W_APOE4,
+                    alleles > 0
+                            ? "Carrying " + alleles + " e4 allele(s) raises lifetime risk and lowers age at onset."
+                            : "Non-carrier for APOE e4."));
+        } else {
+            gaps.add("APOE genotype unavailable");
+        }
 
+        // ---- Brain volume: INVERTED, lower is worse ----
+        if (p.getNwbv() != null) {
+            double sevVol = clamp((0.78 - p.getNwbv()) / 0.12);
+            weighted += sevVol * W_BRAIN_VOL;
+            availableWeight += W_BRAIN_VOL;
+            factors.add(new RiskFactor("Brain volume", String.valueOf(p.getNwbv()), sevVol * W_BRAIN_VOL,
+                    "Reduced normalized whole-brain volume is consistent with neurodegenerative atrophy."));
+        } else {
+            gaps.add("MRI volumetrics not yet acquired");
+        }
+
+        // ---- Age ----
+        if (p.getAge() != null) {
+            double sevAge = clamp((p.getAge() - 60.0) / 30.0);
+            weighted += sevAge * W_AGE;
+            availableWeight += W_AGE;
+            factors.add(new RiskFactor("Age", p.getAge() + " yrs", sevAge * W_AGE,
+                    "Age is the dominant non-modifiable risk factor; incidence roughly doubles every five years after 65."));
+        } else {
+            gaps.add("Age not recorded");
+        }
+
+        // ---- Comorbidity burden ----
+        if (p.getComorbidities() != null && !p.getComorbidities().isEmpty()) {
+            int count = p.getComorbidities().size();
+            double sevCom = clamp(count / 3.0);
+            weighted += sevCom * W_COMORBIDITY;
+            availableWeight += W_COMORBIDITY;
+            factors.add(new RiskFactor("Comorbidities", String.valueOf(count), sevCom * W_COMORBIDITY,
+                    "Vascular and metabolic comorbidities are associated with accelerated cognitive decline."));
+        }
+
+        // ---- Education: PROTECTIVE, negative weight ----
+        if (p.getEducationYears() != null) {
+            double sevEdu = clamp((p.getEducationYears() - 8.0) / 10.0);
+            weighted += sevEdu * W_EDUCATION;
+            availableWeight += Math.abs(W_EDUCATION);
+            factors.add(new RiskFactor("Education", p.getEducationYears() + " yrs", sevEdu * W_EDUCATION,
+                    "Higher educational attainment is a proxy for cognitive reserve and is protective."));
+        }
 
 
 
