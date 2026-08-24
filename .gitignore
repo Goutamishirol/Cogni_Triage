@@ -2,3 +2,25 @@
 .idea/
 *.iml
 .vscode/
+# Node / React
+frontend/node_modules/
+frontend/dist/
+
+# Spring Boot / Maven
+backend/target/
+
+# Environment variables
+.env
+frontend/.env
+backend/.env
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
