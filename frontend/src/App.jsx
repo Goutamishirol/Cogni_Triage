@@ -1,6 +1,8 @@
 import { useDeferredValue, useEffect, useState } from "react";
 
-const API = "http://localhost:8080/api/v1";
+// const API = "http://localhost:8080/api/v1";
+// const API = "https://cogni-triage-backend.onrender.com";
+const API = "https://cogni-triage-backend.onrender.com/api/v1";
 
 export default function App() {
   const [all, setAll] = useState([]);
