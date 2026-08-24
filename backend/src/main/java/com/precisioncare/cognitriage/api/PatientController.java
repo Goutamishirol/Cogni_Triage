@@ -21,8 +21,13 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1")
-@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:3000"})
+// @CrossOrigin(origins = {"http://localhost:5173", "http://localhost:3000"})
 // @CrossOrigin(origins = "https://your-frontend.vercel.app")
+@CrossOrigin(origins = {
+    "http://localhost:5173",
+    "http://localhost:3000",
+    "https://cogni-triage.vercel.app"
+})
 public class PatientController {
 
     private final PatientRepository patients;
