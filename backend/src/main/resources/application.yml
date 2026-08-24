@@ -1,14 +1,16 @@
 spring:
   application:
     name: CogniTriage
+
   datasource:
-    url: jdbc:postgresql://localhost:5434/cognitriage
-    username: cognitriage
-    password: cognitriage
+    url: ${DB_URL:jdbc:postgresql://localhost:5434/cognitriage}
+    username: ${DB_USERNAME:cognitriage}
+    password: ${DB_PASSWORD:cognitriage}
+
   jpa:
     hibernate:
       ddl-auto: update
     open-in-view: false
 
 server:
-  port: 8080
+  port: ${PORT:8080}
